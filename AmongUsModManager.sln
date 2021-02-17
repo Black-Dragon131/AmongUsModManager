@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31005.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmongUsModManager", "AmongUsModManager\AmongUsModManager.csproj", "{8BAEEE61-C0AC-4CE5-967C-8BFD5D4D2E2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BAEEE61-C0AC-4CE5-967C-8BFD5D4D2E2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BAEEE61-C0AC-4CE5-967C-8BFD5D4D2E2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BAEEE61-C0AC-4CE5-967C-8BFD5D4D2E2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BAEEE61-C0AC-4CE5-967C-8BFD5D4D2E2A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {20C73C30-99F0-4BB4-99C1-E50433AC764E}
+	EndGlobalSection
+EndGlobal
