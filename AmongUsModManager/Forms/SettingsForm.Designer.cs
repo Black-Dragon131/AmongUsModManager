@@ -98,6 +98,7 @@ namespace AmongUsModManager.Forms
             this.cbModUpdates.Size = new System.Drawing.Size(15, 14);
             this.cbModUpdates.TabIndex = 6;
             this.cbModUpdates.UseVisualStyleBackColor = true;
+            this.cbModUpdates.Visible = false;
             this.cbModUpdates.CheckedChanged += new System.EventHandler(this.cbModUpdates_CheckedChanged);
             // 
             // lblCheckModUpdates
@@ -108,6 +109,7 @@ namespace AmongUsModManager.Forms
             this.lblCheckModUpdates.Size = new System.Drawing.Size(132, 15);
             this.lblCheckModUpdates.TabIndex = 7;
             this.lblCheckModUpdates.Text = "Check for Mod Updates";
+            this.lblCheckModUpdates.Visible = false;
             // 
             // SettingsForm
             // 
