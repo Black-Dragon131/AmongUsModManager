@@ -34,6 +34,8 @@ namespace AmongUsModManager
 		public string AmongUsPath { get; set; }
 		[XmlElement(ElementName = "checkModUpdates")]
 		public bool CheckModUpdates { get; set; }
+		[XmlElement(ElementName = "checkAummUpdates")]
+		public bool CheckAummUpdates { get; set; }
 		[XmlElement(ElementName = "installedMods")]
 		public InstalledMods InstalledMods { get; set; }
 	}

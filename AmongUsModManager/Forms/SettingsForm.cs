@@ -15,6 +15,7 @@ namespace AmongUsModManager.Forms
         {
             txtBoxPath.Text = Settings.amongUsPath;
             cbModUpdates.Checked = Settings.checkModUpdates;
+            cbAummUpdates.Checked = Settings.checkAummUpdates;
         }
 
         private void btnSearchPath_Click(object sender, EventArgs e)
@@ -32,6 +33,11 @@ namespace AmongUsModManager.Forms
         private void cbModUpdates_CheckedChanged(object sender, EventArgs e)
         {
             Settings.checkModUpdates = cbModUpdates.Checked;
+        }
+
+        private void cbAummUpdates_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.checkAummUpdates = cbAummUpdates.Checked;
         }
     }
 }

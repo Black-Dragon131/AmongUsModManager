@@ -35,10 +35,11 @@ namespace AmongUsModManager
             this.btnMenuManageMods = new FontAwesome.Sharp.IconButton();
             this.btnMenuInstallMods = new FontAwesome.Sharp.IconButton();
             this.panelLogo = new System.Windows.Forms.Panel();
+            this.btnUpdate = new FontAwesome.Sharp.IconButton();
+            this.lblVersion = new System.Windows.Forms.Label();
             this.panelTabContainer = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.btnClose = new FontAwesome.Sharp.IconButton();
-            this.lblVersion = new System.Windows.Forms.Label();
             this.panelMenu.SuspendLayout();
             this.panelLogo.SuspendLayout();
             this.SuspendLayout();
@@ -123,12 +124,47 @@ namespace AmongUsModManager
             // 
             // panelLogo
             // 
+            this.panelLogo.Controls.Add(this.btnUpdate);
             this.panelLogo.Controls.Add(this.lblVersion);
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelLogo.Location = new System.Drawing.Point(0, 0);
             this.panelLogo.Name = "panelLogo";
             this.panelLogo.Size = new System.Drawing.Size(160, 50);
             this.panelLogo.TabIndex = 0;
+            // 
+            // btnUpdate
+            // 
+            this.btnUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(131)))), ((int)(((byte)(84)))));
+            this.btnUpdate.FlatAppearance.BorderSize = 0;
+            this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUpdate.ForeColor = System.Drawing.Color.White;
+            this.btnUpdate.IconChar = FontAwesome.Sharp.IconChar.ArrowAltCircleDown;
+            this.btnUpdate.IconColor = System.Drawing.Color.White;
+            this.btnUpdate.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnUpdate.IconSize = 36;
+            this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.btnUpdate.Location = new System.Drawing.Point(0, 0);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Padding = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.btnUpdate.Size = new System.Drawing.Size(160, 50);
+            this.btnUpdate.TabIndex = 0;
+            this.btnUpdate.Text = "UPDATE NOW";
+            this.btnUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdate.Visible = false;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
+            // 
+            // lblVersion
+            // 
+            this.lblVersion.AutoSize = true;
+            this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblVersion.ForeColor = System.Drawing.Color.White;
+            this.lblVersion.Location = new System.Drawing.Point(38, 17);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(49, 17);
+            this.lblVersion.TabIndex = 4;
+            this.lblVersion.Text = "AUMM";
             // 
             // panelTabContainer
             // 
@@ -166,17 +202,6 @@ namespace AmongUsModManager
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
-            // lblVersion
-            // 
-            this.lblVersion.AutoSize = true;
-            this.lblVersion.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVersion.ForeColor = System.Drawing.Color.White;
-            this.lblVersion.Location = new System.Drawing.Point(38, 17);
-            this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(49, 17);
-            this.lblVersion.TabIndex = 4;
-            this.lblVersion.Text = "AUMM";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -212,6 +237,7 @@ namespace AmongUsModManager
         private FontAwesome.Sharp.IconButton btnMenuInstallMods;
         private FontAwesome.Sharp.IconButton btnClose;
         private System.Windows.Forms.Label lblVersion;
+        private FontAwesome.Sharp.IconButton btnUpdate;
     }
 }
 

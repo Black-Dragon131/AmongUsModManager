@@ -1,6 +1,11 @@
 ﻿using AmongUsModManager.Forms;
+using Newtonsoft.Json.Linq;
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -46,11 +51,17 @@ namespace AmongUsModManager
          );
         #endregion
 
-        private const string aummVersion = "0.8";
+        private const int majorVersion = 0;
+        private const int minorVersion = 7;
+        private const string UPDATE_BASE_URL = "https://aumm.black-dragon131.de/";
+        private const string UPDATE_JSON_NAME = "aumm.json";
+        private const string UPDATE_NAME = "AmongUsModManager_new.exe";
+        private const string UPDATER = "AUMMUpdater.exe";
         private Form _activeTab;
         private Button _activeButton;
         private readonly Color _highlightColor = Color.FromArgb(79, 93, 117);
         private readonly Color _normalColor = Color.FromArgb(45, 49, 66);
+        private WebClient _webClient;
 
         public MainForm()
         {
@@ -68,12 +79,34 @@ namespace AmongUsModManager
 
         private void Init()
         {
-            lblVersion.Text = $"AUMM v{aummVersion}";
+            lblVersion.Text = $"AUMM v{majorVersion}.{minorVersion}";
             if (Settings.IsFirstRun())
             {
                 MessageBox.Show("It seems like this is the first start.\r\nTrying to find Among Us automatically.\r\nIf I can't find it you have to select the path manually!", "Info");
                 Settings.SearchInstallFolder();
                 Settings.SaveConfig();
+            }
+
+            _webClient = new WebClient();
+
+            if (Settings.checkAummUpdates)
+                CheckForUpdate();
+        }
+
+        private void CheckForUpdate()
+        {
+            string url = Path.Combine(UPDATE_BASE_URL, UPDATE_JSON_NAME);
+
+            string json = _webClient.DownloadString(url);
+
+            JObject aummUpdate = JObject.Parse(json);
+            int remoteMajorVersion = (int)aummUpdate["version"]["major_version"];
+            int remoteMinorVersion = (int)aummUpdate["version"]["minor_version"];
+
+            if (remoteMajorVersion > majorVersion || remoteMinorVersion > minorVersion)
+            {
+                Utils.Alert("New AUMM version aviable.", AlertForm.enmType.Info);
+                btnUpdate.Visible = true;
             }
         }
 
@@ -125,6 +158,24 @@ namespace AmongUsModManager
         private void btnMenuManageMods_Click(object sender, EventArgs e)
         {
             ChangeTab(new ManageModsForm(), sender);
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            _webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+            Uri uri = new Uri(Path.Combine(UPDATE_BASE_URL, UPDATE_NAME));
+            string location = Application.StartupPath;
+            _webClient.DownloadFileAsync(uri, location + "\\" + UPDATE_NAME);
+        }
+
+        private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            var result = MessageBox.Show("Update Download complete. Would you like to install?", "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            if (result == DialogResult.Yes)
+            {
+                Process.Start(UPDATER, UPDATE_NAME);
+                Environment.Exit(0);
+            }
         }
     }
 }

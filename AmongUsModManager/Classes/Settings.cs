@@ -15,6 +15,7 @@ namespace AmongUsModManager
         public static string exeName = "Among Us.exe";
         public static string amongUsPath;
         public static bool checkModUpdates;
+        public static bool checkAummUpdates;
         public static string configDir;
         public static List<InstalledMod> installedMods;
 
@@ -61,6 +62,7 @@ namespace AmongUsModManager
                 Config data = (Config)serializer.Deserialize(file);
                 amongUsPath = data.AmongUsPath;
                 checkModUpdates = data.CheckModUpdates;
+                checkAummUpdates = data.CheckAummUpdates;
 
                 foreach (var item in data.InstalledMods.InstalledMod)
                 {
@@ -73,18 +75,20 @@ namespace AmongUsModManager
 
         public static void SaveConfig()
         {
+            var config = new Config();
+
             // Check if config dir exists and create one if not
             if (!Directory.Exists(configDir))
             {
                 Directory.CreateDirectory(configDir);
+                checkAummUpdates = true;
             }
 
             XmlSerializer xsSubmit = new XmlSerializer(typeof(Config));
-            var config = new Config();
-            var xml = "";
-
+            
             config.AmongUsPath = amongUsPath;
             config.CheckModUpdates = checkModUpdates;
+            config.CheckAummUpdates = checkAummUpdates;
 
             InstalledMods mods = new InstalledMods();
             mods.InstalledMod = installedMods;
@@ -96,7 +100,7 @@ namespace AmongUsModManager
                 using (XmlWriter writer = XmlWriter.Create(stringWriter, settings))
                 {
                     xsSubmit.Serialize(writer, config);
-                    xml = stringWriter.ToString();
+                    string xml = stringWriter.ToString();
                     File.WriteAllText(_configFile, xml);
                 }
             }
@@ -152,7 +156,7 @@ namespace AmongUsModManager
 
         private static string GetInstallDir()
         {
-            object installPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 945360L", "InstallLocation", null);
+            object installPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 945360", "InstallLocation", null);
             if (installPath == null)
             {
                 return "";

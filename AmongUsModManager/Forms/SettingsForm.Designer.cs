@@ -34,12 +34,13 @@ namespace AmongUsModManager.Forms
             this.txtBoxPath = new System.Windows.Forms.TextBox();
             this.btnSearchPath = new FontAwesome.Sharp.IconButton();
             this.btnSave = new FontAwesome.Sharp.IconButton();
+            this.cbAummUpdates = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // lblPath
             // 
             this.lblPath.AutoSize = true;
-            this.lblPath.Location = new System.Drawing.Point(12, 15);
+            this.lblPath.Location = new System.Drawing.Point(12, 16);
             this.lblPath.Name = "lblPath";
             this.lblPath.Size = new System.Drawing.Size(93, 15);
             this.lblPath.TabIndex = 0;
@@ -48,9 +49,8 @@ namespace AmongUsModManager.Forms
             // cbModUpdates
             // 
             this.cbModUpdates.AutoSize = true;
-            this.cbModUpdates.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.cbModUpdates.FlatAppearance.BorderSize = 0;
-            this.cbModUpdates.Location = new System.Drawing.Point(12, 41);
+            this.cbModUpdates.Location = new System.Drawing.Point(15, 66);
             this.cbModUpdates.Name = "cbModUpdates";
             this.cbModUpdates.Size = new System.Drawing.Size(151, 19);
             this.cbModUpdates.TabIndex = 2;
@@ -107,12 +107,25 @@ namespace AmongUsModManager.Forms
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // cbAummUpdates
+            // 
+            this.cbAummUpdates.AutoSize = true;
+            this.cbAummUpdates.FlatAppearance.BorderSize = 0;
+            this.cbAummUpdates.Location = new System.Drawing.Point(15, 41);
+            this.cbAummUpdates.Name = "cbAummUpdates";
+            this.cbAummUpdates.Size = new System.Drawing.Size(164, 19);
+            this.cbAummUpdates.TabIndex = 6;
+            this.cbAummUpdates.Text = "Check for AUMM Updates";
+            this.cbAummUpdates.UseVisualStyleBackColor = true;
+            this.cbAummUpdates.CheckedChanged += new System.EventHandler(this.cbAummUpdates_CheckedChanged);
+            // 
             // SettingsForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(642, 410);
+            this.Controls.Add(this.cbAummUpdates);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnSearchPath);
             this.Controls.Add(this.txtBoxPath);
@@ -134,5 +147,6 @@ namespace AmongUsModManager.Forms
         private System.Windows.Forms.TextBox txtBoxPath;
         private FontAwesome.Sharp.IconButton btnSearchPath;
         private FontAwesome.Sharp.IconButton btnSave;
+        private System.Windows.Forms.CheckBox cbAummUpdates;
     }
 }
