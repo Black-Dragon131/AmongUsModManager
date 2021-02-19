@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace AmongUsModManager
 {
-    public partial class FormMain : Form
+    public partial class MainForm : Form
     {
         #region UI
         protected override CreateParams CreateParams
@@ -51,7 +51,7 @@ namespace AmongUsModManager
         private Color highlightColor = Color.FromArgb(79, 93, 117);
         private Color normalColor = Color.FromArgb(45, 49, 66);
 
-        public FormMain()
+        public MainForm()
         {
             InitializeComponent();
             Init();

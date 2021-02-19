@@ -115,6 +115,7 @@ namespace AmongUsModManager.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(642, 410);
             this.Controls.Add(this.lblCheckModUpdates);
             this.Controls.Add(this.cbModUpdates);

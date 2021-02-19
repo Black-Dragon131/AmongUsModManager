@@ -1,7 +1,7 @@
 ﻿
 namespace AmongUsModManager
 {
-    partial class FormMain
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,7 +29,7 @@ namespace AmongUsModManager
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.panelMenu = new System.Windows.Forms.Panel();
             this.btnMenuManageMods = new FontAwesome.Sharp.IconButton();
             this.btnMenuSettings = new FontAwesome.Sharp.IconButton();
