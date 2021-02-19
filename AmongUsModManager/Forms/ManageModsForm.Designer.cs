@@ -29,46 +29,34 @@ namespace AmongUsModManager.Forms
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbAvailableMods = new System.Windows.Forms.ComboBox();
             this.lblAviableMods = new System.Windows.Forms.Label();
-            this.pbModPreview = new System.Windows.Forms.PictureBox();
+            this.cbAvailableMods = new System.Windows.Forms.ComboBox();
             this.txtModDescription = new System.Windows.Forms.TextBox();
+            this.pbModPreview = new System.Windows.Forms.PictureBox();
             this.btnStartMod = new FontAwesome.Sharp.IconButton();
             this.btnDeleteMod = new FontAwesome.Sharp.IconButton();
             ((System.ComponentModel.ISupportInitialize)(this.pbModPreview)).BeginInit();
             this.SuspendLayout();
             // 
-            // cbAvailableMods
-            // 
-            this.cbAvailableMods.BackColor = System.Drawing.Color.White;
-            this.cbAvailableMods.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbAvailableMods.ForeColor = System.Drawing.Color.Black;
-            this.cbAvailableMods.FormattingEnabled = true;
-            this.cbAvailableMods.Location = new System.Drawing.Point(109, 12);
-            this.cbAvailableMods.MaxDropDownItems = 99;
-            this.cbAvailableMods.Name = "cbAvailableMods";
-            this.cbAvailableMods.Size = new System.Drawing.Size(239, 23);
-            this.cbAvailableMods.TabIndex = 0;
-            this.cbAvailableMods.SelectedIndexChanged += new System.EventHandler(this.cbAvailableMods_SelectedIndexChanged);
-            // 
             // lblAviableMods
             // 
             this.lblAviableMods.AutoSize = true;
-            this.lblAviableMods.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+            this.lblAviableMods.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Underline);
             this.lblAviableMods.Location = new System.Drawing.Point(12, 16);
             this.lblAviableMods.Name = "lblAviableMods";
             this.lblAviableMods.Size = new System.Drawing.Size(87, 15);
-            this.lblAviableMods.TabIndex = 1;
+            this.lblAviableMods.TabIndex = 0;
             this.lblAviableMods.Text = "Installed Mods:";
             // 
-            // pbModPreview
+            // cbAvailableMods
             // 
-            this.pbModPreview.Location = new System.Drawing.Point(354, 12);
-            this.pbModPreview.Name = "pbModPreview";
-            this.pbModPreview.Size = new System.Drawing.Size(276, 260);
-            this.pbModPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbModPreview.TabIndex = 2;
-            this.pbModPreview.TabStop = false;
+            this.cbAvailableMods.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbAvailableMods.FormattingEnabled = true;
+            this.cbAvailableMods.Location = new System.Drawing.Point(109, 12);
+            this.cbAvailableMods.Name = "cbAvailableMods";
+            this.cbAvailableMods.Size = new System.Drawing.Size(239, 23);
+            this.cbAvailableMods.TabIndex = 1;
+            this.cbAvailableMods.SelectedIndexChanged += new System.EventHandler(this.cbAvailableMods_SelectedIndexChanged);
             // 
             // txtModDescription
             // 
@@ -80,7 +68,16 @@ namespace AmongUsModManager.Forms
             this.txtModDescription.ReadOnly = true;
             this.txtModDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtModDescription.Size = new System.Drawing.Size(336, 357);
-            this.txtModDescription.TabIndex = 3;
+            this.txtModDescription.TabIndex = 2;
+            // 
+            // pbModPreview
+            // 
+            this.pbModPreview.Location = new System.Drawing.Point(354, 12);
+            this.pbModPreview.Name = "pbModPreview";
+            this.pbModPreview.Size = new System.Drawing.Size(276, 260);
+            this.pbModPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pbModPreview.TabIndex = 3;
+            this.pbModPreview.TabStop = false;
             // 
             // btnStartMod
             // 
@@ -88,7 +85,7 @@ namespace AmongUsModManager.Forms
             this.btnStartMod.Enabled = false;
             this.btnStartMod.FlatAppearance.BorderSize = 0;
             this.btnStartMod.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStartMod.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnStartMod.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnStartMod.ForeColor = System.Drawing.Color.White;
             this.btnStartMod.IconChar = FontAwesome.Sharp.IconChar.Play;
             this.btnStartMod.IconColor = System.Drawing.Color.White;
@@ -109,7 +106,7 @@ namespace AmongUsModManager.Forms
             this.btnDeleteMod.Enabled = false;
             this.btnDeleteMod.FlatAppearance.BorderSize = 0;
             this.btnDeleteMod.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnDeleteMod.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnDeleteMod.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnDeleteMod.ForeColor = System.Drawing.Color.White;
             this.btnDeleteMod.IconChar = FontAwesome.Sharp.IconChar.TrashAlt;
             this.btnDeleteMod.IconColor = System.Drawing.Color.White;
@@ -132,10 +129,11 @@ namespace AmongUsModManager.Forms
             this.ClientSize = new System.Drawing.Size(642, 410);
             this.Controls.Add(this.btnDeleteMod);
             this.Controls.Add(this.btnStartMod);
-            this.Controls.Add(this.txtModDescription);
             this.Controls.Add(this.pbModPreview);
-            this.Controls.Add(this.lblAviableMods);
+            this.Controls.Add(this.txtModDescription);
             this.Controls.Add(this.cbAvailableMods);
+            this.Controls.Add(this.lblAviableMods);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "ManageModsForm";
             this.Text = "MANAGE MODS";
@@ -147,10 +145,10 @@ namespace AmongUsModManager.Forms
 
         #endregion
 
-        private System.Windows.Forms.ComboBox cbAvailableMods;
         private System.Windows.Forms.Label lblAviableMods;
-        private System.Windows.Forms.PictureBox pbModPreview;
+        private System.Windows.Forms.ComboBox cbAvailableMods;
         private System.Windows.Forms.TextBox txtModDescription;
+        private System.Windows.Forms.PictureBox pbModPreview;
         private FontAwesome.Sharp.IconButton btnStartMod;
         private FontAwesome.Sharp.IconButton btnDeleteMod;
     }

@@ -1,20 +1,12 @@
-﻿using Microsoft.Win32;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace AmongUsModManager.Forms
@@ -23,11 +15,11 @@ namespace AmongUsModManager.Forms
     {
         const string MODS_XML_URL = "https://aumm.black-dragon131.de/";
         const string MODS_XML_NAME = "mods.xml";
-        private bool shouldHideProgress = false;
-        private WebClient webClient;
-        private List<Mod> availableMods;
-        private string currentModPath = "";
-        private InstalledMod currentInstallingMod;
+        private bool _shouldHideProgress = false;
+        private WebClient _webClient;
+        private List<Mod> _availableMods;
+        private string _currentModPath = "";
+        private InstalledMod _currentInstallingMod;
 
         public InstallModsForm()
         {
@@ -37,29 +29,28 @@ namespace AmongUsModManager.Forms
 
         private void Init()
         {
-            webClient = new WebClient();
-            webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
-            webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+            _webClient = new WebClient();
+            _webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
+            _webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
 
-            availableMods = new List<Mod>();
+            _availableMods = new List<Mod>();
 
             DownloadModsXML();
         }
 
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            //MessageBox.Show("Download complete!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             pgrbDownload.Visible = false;
+            lblDownloadStatus.Visible = false;
 
-            if (shouldHideProgress)
+            if (_shouldHideProgress)
             {
                 PopulateList();
-                shouldHideProgress = false;
+                _shouldHideProgress = false;
             }
             else
             {
-                lblDownloadStatus.Text = "Download complete.";
-                ExtractMod(currentModPath);
+                ExtractMod(_currentModPath);
             }
         }
 
@@ -81,7 +72,7 @@ namespace AmongUsModManager.Forms
         {
             if (!string.IsNullOrEmpty(url))
             {
-                if (!shouldHideProgress)
+                if (!_shouldHideProgress)
                 {
                     pgrbDownload.Visible = true;
                     lblDownloadStatus.Text = "";
@@ -90,13 +81,13 @@ namespace AmongUsModManager.Forms
                 Uri uri = new Uri(url);
                 string fileName = Path.GetFileName(uri.AbsolutePath);
 
-                webClient.DownloadFileAsync(uri, location + "\\" + fileName);
+                _webClient.DownloadFileAsync(uri, location + "\\" + fileName);
             }
         }
 
         private void DownloadModsXML()
         {
-            shouldHideProgress = true;
+            _shouldHideProgress = true;
             string url = Path.Combine(MODS_XML_URL, MODS_XML_NAME);
             DoDownload(url, Settings.configDir);
         }
@@ -115,7 +106,7 @@ namespace AmongUsModManager.Forms
                 foreach (var item in data.Mod)
                 {
                     dataSource.Add(item);
-                    availableMods.Add(item);
+                    _availableMods.Add(item);
                 }
             }
 
@@ -134,53 +125,51 @@ namespace AmongUsModManager.Forms
         {
             int id = GetCurrentId();
 
-            string text = availableMods[id].Description.Replace("§", Environment.NewLine);
-            lblAuthorName.Text = availableMods[id].Author;
+            string text = _availableMods[id].Description.Replace("§", Environment.NewLine);
+            lblAuthorName.Text = _availableMods[id].Author;
             txtModDescription.Text = text;
-            pbModPreview.Load(availableMods[id].Preview_url);
+            pbModPreview.Load(_availableMods[id].Preview_url);
         }
 
         private void InstallMod()
         {
-            if(string.IsNullOrEmpty(Settings.amongUsPath))
+            if (string.IsNullOrEmpty(Settings.amongUsPath))
             {
-                MessageBox.Show("Can' t install mods as no Among Us path is set!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Utils.Alert("Can' t install mods as no Among Us path is set!", AlertForm.enmType.Error);
                 return;
             }
 
             string parent = Directory.GetParent(Settings.amongUsPath).FullName;
 
             int id = GetCurrentId();
-            string dest = Settings.folderName + "_" + availableMods[id].Name.Replace(" ","");
-            currentModPath = Path.Combine(parent, dest);
+            string dest = Settings.folderName + "_" + _availableMods[id].Name.Replace(" ", "");
+            _currentModPath = Path.Combine(parent, dest);
 
-            bool copyOk = CopyFolder(Settings.amongUsPath, currentModPath);
+            bool copyOk = CopyFolder(Settings.amongUsPath, _currentModPath);
 
-            currentInstallingMod = new InstalledMod();
-            currentInstallingMod.Name = availableMods[id].Name;
-            currentInstallingMod.Preview_url = availableMods[id].Preview_url;
-            currentInstallingMod.Location = currentModPath;
-            currentInstallingMod.Id = id.ToString();
-            currentInstallingMod.Description = availableMods[id].Description;
+            _currentInstallingMod = new InstalledMod();
+            _currentInstallingMod.Name = _availableMods[id].Name;
+            _currentInstallingMod.Preview_url = _availableMods[id].Preview_url;
+            _currentInstallingMod.Location = _currentModPath;
+            _currentInstallingMod.Id = id.ToString();
+            _currentInstallingMod.Description = _availableMods[id].Description;
 
             if (copyOk)
-                DownloadMod(currentModPath);
+                DownloadMod(_currentModPath);
         }
 
         private void DownloadMod(string location)
         {
-            if (availableMods[GetCurrentId()].Github)
+            if (_availableMods[GetCurrentId()].Github)
             {
-                string url = availableMods[GetCurrentId()].Download_url;
-                
-                webClient.Headers.Add("user-agent", "Among Us Mod Manager");
-                var json = webClient.DownloadString(url);
+                string url = _availableMods[GetCurrentId()].Download_url;
+
+                _webClient.Headers.Add("user-agent", "Among Us Mod Manager");
+                var json = _webClient.DownloadString(url);
                 JObject modInfo = JObject.Parse(json);
                 DateTime creationDate = (DateTime)modInfo["assets"][0]["created_at"];
                 string downloadUrl = (string)modInfo["assets"][0]["browser_download_url"];
-                //Debug.WriteLine(creationDate.ToString("s"));
-                //Debug.WriteLine(downloadUrl);
-                currentInstallingMod.CreationDate = creationDate.ToString("s");
+                _currentInstallingMod.CreationDate = creationDate.ToString("s");
 
                 DoDownload(downloadUrl, location);
             }
@@ -188,7 +177,6 @@ namespace AmongUsModManager.Forms
 
         private void ExtractMod(string targetPath)
         {
-            lblDownloadStatus.Text = "Installing mod...";
             Directory.GetFiles(targetPath, "*.zip").ToList()
             .ForEach(zipFilePath => {
                 ZipFile.ExtractToDirectory(zipFilePath, targetPath);
@@ -199,16 +187,14 @@ namespace AmongUsModManager.Forms
 
         private void AddModToInstalledMods()
         {
-            int index = Settings.installedMods.FindIndex(f => f.Id == currentInstallingMod.Id);
-            if(index >= 0)
+            int index = Settings.installedMods.FindIndex(f => f.Id == _currentInstallingMod.Id);
+            if (index >= 0)
                 Settings.installedMods.RemoveAt(index);
 
-            Debug.WriteLine($"index: {index}; current:{currentInstallingMod.Id}");
-
-            Settings.installedMods.Add(currentInstallingMod);
+            Settings.installedMods.Add(_currentInstallingMod);
             Settings.SaveConfig();
 
-            lblDownloadStatus.Text = "Mod installed.";
+            Utils.Alert($"{_currentInstallingMod.Name} installed.", AlertForm.enmType.Success);
         }
 
         private bool CopyFolder(string sourceFolder, string destFolder)

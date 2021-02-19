@@ -1,16 +1,14 @@
-﻿using Microsoft.Win32;
+﻿using AmongUsModManager.Forms;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using System.Xml;
-using System.Xml.Linq;
 using System.Xml.Serialization;
 
 namespace AmongUsModManager
-{ 
+{
     static class Settings
     {
         public static string folderName = "Among Us";
@@ -20,15 +18,15 @@ namespace AmongUsModManager
         public static string configDir;
         public static List<InstalledMod> installedMods;
 
-        private static string configPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-        private static string configDirName = "AmongUsModManager";
-        private static string configFileName = "settings.xml";
-        private static string configFile;
+        private static string _configPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        private static string _configDirName = "AmongUsModManager";
+        private static string _configFileName = "settings.xml";
+        private static string _configFile;
 
         static Settings()
         {
-            configDir = Path.Combine(configPath, configDirName);
-            configFile = Path.Combine(configDir, configFileName);
+            configDir = Path.Combine(_configPath, _configDirName);
+            _configFile = Path.Combine(configDir, _configFileName);
             installedMods = new List<InstalledMod>();
 
             if (IsFirstRun())
@@ -52,14 +50,13 @@ namespace AmongUsModManager
 
         public static bool LoadConfig()
         {
-            if(!File.Exists(configFile))
+            if(!File.Exists(_configFile))
             {
                 return false;
             }
 
             var serializer = new XmlSerializer(typeof(Config));
-            Debug.WriteLine(serializer);
-            using (StreamReader file = File.OpenText(configFile))
+            using (StreamReader file = File.OpenText(_configFile))
             {
                 Config data = (Config)serializer.Deserialize(file);
                 amongUsPath = data.AmongUsPath;
@@ -100,7 +97,7 @@ namespace AmongUsModManager
                 {
                     xsSubmit.Serialize(writer, config);
                     xml = stringWriter.ToString();
-                    File.WriteAllText(configFile, xml);
+                    File.WriteAllText(_configFile, xml);
                 }
             }
         }
@@ -124,6 +121,12 @@ namespace AmongUsModManager
 
         public static void CheckValidFolder(string installPath)
         {
+            if (String.IsNullOrEmpty(installPath))
+            {
+                Utils.Alert("Among Us path not set!", AlertForm.enmType.Warning);
+                return;
+            }
+
             if (Path.GetFileName(installPath.TrimEnd(Path.DirectorySeparatorChar)) != folderName)
             {
                 MessageBox.Show($"Selected folder doesn' t match '{folderName}'!\r\nPlease select the correct folder in settings.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -140,7 +143,6 @@ namespace AmongUsModManager
             if (String.IsNullOrEmpty(installPath))
             {
                 MessageBox.Show("Couldn' t find Among Us!\r\nPlease select base folder 'Among Us' in the following dialog.", "Warning",MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                Debug.WriteLine("Install path not found. Select one...");
                 // Show filebrowser dialog
                 installPath = GetFolderByDialog();
             }
@@ -150,7 +152,7 @@ namespace AmongUsModManager
 
         private static string GetInstallDir()
         {
-            object installPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 945360", "InstallLocation", null);
+            object installPath = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 945360L", "InstallLocation", null);
             if (installPath == null)
             {
                 return "";

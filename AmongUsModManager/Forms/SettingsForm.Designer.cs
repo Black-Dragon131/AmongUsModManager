@@ -30,11 +30,10 @@ namespace AmongUsModManager.Forms
         private void InitializeComponent()
         {
             this.lblPath = new System.Windows.Forms.Label();
-            this.txtBoxPath = new System.Windows.Forms.TextBox();
-            this.btnSearchPath = new System.Windows.Forms.Button();
-            this.btnSave = new FontAwesome.Sharp.IconButton();
             this.cbModUpdates = new System.Windows.Forms.CheckBox();
-            this.lblCheckModUpdates = new System.Windows.Forms.Label();
+            this.txtBoxPath = new System.Windows.Forms.TextBox();
+            this.btnSearchPath = new FontAwesome.Sharp.IconButton();
+            this.btnSave = new FontAwesome.Sharp.IconButton();
             this.SuspendLayout();
             // 
             // lblPath
@@ -46,13 +45,28 @@ namespace AmongUsModManager.Forms
             this.lblPath.TabIndex = 0;
             this.lblPath.Text = "Among Us Path:";
             // 
+            // cbModUpdates
+            // 
+            this.cbModUpdates.AutoSize = true;
+            this.cbModUpdates.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.cbModUpdates.FlatAppearance.BorderSize = 0;
+            this.cbModUpdates.Location = new System.Drawing.Point(12, 41);
+            this.cbModUpdates.Name = "cbModUpdates";
+            this.cbModUpdates.Size = new System.Drawing.Size(151, 19);
+            this.cbModUpdates.TabIndex = 2;
+            this.cbModUpdates.Text = "Check for Mod Updates";
+            this.cbModUpdates.UseVisualStyleBackColor = true;
+            this.cbModUpdates.Visible = false;
+            this.cbModUpdates.CheckedChanged += new System.EventHandler(this.cbModUpdates_CheckedChanged);
+            // 
             // txtBoxPath
             // 
+            this.txtBoxPath.BackColor = System.Drawing.SystemColors.Control;
             this.txtBoxPath.Location = new System.Drawing.Point(150, 12);
             this.txtBoxPath.Name = "txtBoxPath";
             this.txtBoxPath.ReadOnly = true;
             this.txtBoxPath.Size = new System.Drawing.Size(430, 23);
-            this.txtBoxPath.TabIndex = 2;
+            this.txtBoxPath.TabIndex = 3;
             // 
             // btnSearchPath
             // 
@@ -60,10 +74,13 @@ namespace AmongUsModManager.Forms
             this.btnSearchPath.FlatAppearance.BorderSize = 0;
             this.btnSearchPath.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSearchPath.ForeColor = System.Drawing.Color.White;
+            this.btnSearchPath.IconChar = FontAwesome.Sharp.IconChar.None;
+            this.btnSearchPath.IconColor = System.Drawing.Color.Black;
+            this.btnSearchPath.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnSearchPath.Location = new System.Drawing.Point(586, 11);
             this.btnSearchPath.Name = "btnSearchPath";
             this.btnSearchPath.Size = new System.Drawing.Size(44, 24);
-            this.btnSearchPath.TabIndex = 3;
+            this.btnSearchPath.TabIndex = 4;
             this.btnSearchPath.Text = "...";
             this.btnSearchPath.UseVisualStyleBackColor = false;
             this.btnSearchPath.Click += new System.EventHandler(this.btnSearchPath_Click);
@@ -73,7 +90,7 @@ namespace AmongUsModManager.Forms
             this.btnSave.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(93)))), ((int)(((byte)(117)))));
             this.btnSave.FlatAppearance.BorderSize = 0;
             this.btnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSave.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnSave.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             this.btnSave.ForeColor = System.Drawing.Color.White;
             this.btnSave.IconChar = FontAwesome.Sharp.IconChar.Save;
             this.btnSave.IconColor = System.Drawing.Color.White;
@@ -84,32 +101,11 @@ namespace AmongUsModManager.Forms
             this.btnSave.Name = "btnSave";
             this.btnSave.Padding = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.btnSave.Size = new System.Drawing.Size(106, 41);
-            this.btnSave.TabIndex = 4;
+            this.btnSave.TabIndex = 5;
             this.btnSave.Text = "Save";
             this.btnSave.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // cbModUpdates
-            // 
-            this.cbModUpdates.AutoSize = true;
-            this.cbModUpdates.Location = new System.Drawing.Point(150, 40);
-            this.cbModUpdates.Name = "cbModUpdates";
-            this.cbModUpdates.Size = new System.Drawing.Size(15, 14);
-            this.cbModUpdates.TabIndex = 6;
-            this.cbModUpdates.UseVisualStyleBackColor = true;
-            this.cbModUpdates.Visible = false;
-            this.cbModUpdates.CheckedChanged += new System.EventHandler(this.cbModUpdates_CheckedChanged);
-            // 
-            // lblCheckModUpdates
-            // 
-            this.lblCheckModUpdates.AutoSize = true;
-            this.lblCheckModUpdates.Location = new System.Drawing.Point(12, 40);
-            this.lblCheckModUpdates.Name = "lblCheckModUpdates";
-            this.lblCheckModUpdates.Size = new System.Drawing.Size(132, 15);
-            this.lblCheckModUpdates.TabIndex = 7;
-            this.lblCheckModUpdates.Text = "Check for Mod Updates";
-            this.lblCheckModUpdates.Visible = false;
             // 
             // SettingsForm
             // 
@@ -117,12 +113,12 @@ namespace AmongUsModManager.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(642, 410);
-            this.Controls.Add(this.lblCheckModUpdates);
-            this.Controls.Add(this.cbModUpdates);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnSearchPath);
             this.Controls.Add(this.txtBoxPath);
+            this.Controls.Add(this.cbModUpdates);
             this.Controls.Add(this.lblPath);
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "SettingsForm";
             this.Text = "SETTINGS";
@@ -134,10 +130,9 @@ namespace AmongUsModManager.Forms
         #endregion
 
         private System.Windows.Forms.Label lblPath;
-        private System.Windows.Forms.TextBox txtBoxPath;
-        private System.Windows.Forms.Button btnSearchPath;
-        private FontAwesome.Sharp.IconButton btnSave;
         private System.Windows.Forms.CheckBox cbModUpdates;
-        private System.Windows.Forms.Label lblCheckModUpdates;
+        private System.Windows.Forms.TextBox txtBoxPath;
+        private FontAwesome.Sharp.IconButton btnSearchPath;
+        private FontAwesome.Sharp.IconButton btnSave;
     }
 }

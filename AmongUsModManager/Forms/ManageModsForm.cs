@@ -1,27 +1,13 @@
-﻿using Microsoft.Win32;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
+﻿using System;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
-using System.Xml;
-using System.Xml.Linq;
-using System.Xml.Serialization;
 
 namespace AmongUsModManager.Forms
 {
     public partial class ManageModsForm : Form
     {
-        private int currentSelectedIndex = -1;
+        private int _currentSelectedIndex = -1;
 
         public ManageModsForm()
         {
@@ -53,15 +39,15 @@ namespace AmongUsModManager.Forms
         private void cbAvailableMods_SelectedIndexChanged(object sender, EventArgs e)
         {
             int id = GetCurrentId();
-            currentSelectedIndex = Settings.installedMods.FindIndex(f => f.Id == id.ToString());
+            _currentSelectedIndex = Settings.installedMods.FindIndex(f => f.Id == id.ToString());
 
-            if (currentSelectedIndex >= 0)
+            if (_currentSelectedIndex >= 0)
             {
                 btnDeleteMod.Enabled = true;
                 btnStartMod.Enabled = true;
-                string text = Settings.installedMods[currentSelectedIndex].Description.Replace("§", Environment.NewLine);
+                string text = Settings.installedMods[_currentSelectedIndex].Description.Replace("§", Environment.NewLine);
                 txtModDescription.Text = text;
-                pbModPreview.Load(Settings.installedMods[currentSelectedIndex].Preview_url);
+                pbModPreview.Load(Settings.installedMods[_currentSelectedIndex].Preview_url);
             }
         }
 
@@ -77,9 +63,9 @@ namespace AmongUsModManager.Forms
 
         private void StartMod()
         {
-            if (currentSelectedIndex >= 0)
+            if (_currentSelectedIndex >= 0)
             {
-                string startPath = Path.Combine(Settings.installedMods[currentSelectedIndex].Location, Settings.exeName);
+                string startPath = Path.Combine(Settings.installedMods[_currentSelectedIndex].Location, Settings.exeName);
                 Process.Start(startPath);
             }
         }
@@ -91,10 +77,10 @@ namespace AmongUsModManager.Forms
 
         private void DeleteMod()
         {
-            if (currentSelectedIndex >= 0)
+            if (_currentSelectedIndex >= 0)
             {
-                DeleteFolder(Settings.installedMods[currentSelectedIndex].Location);
-                Settings.installedMods.RemoveAt(currentSelectedIndex);
+                DeleteFolder(Settings.installedMods[_currentSelectedIndex].Location);
+                Settings.installedMods.RemoveAt(_currentSelectedIndex);
                 Settings.SaveConfig();
                 cbAvailableMods.DataSource = null;
                 txtModDescription.Text = "";
