@@ -47,13 +47,24 @@ namespace AmongUsModManager.Forms
                 btnStartMod.Enabled = true;
                 string text = Settings.installedMods[_currentSelectedIndex].Description.Replace("§", Environment.NewLine);
                 txtModDescription.Text = text;
-                pbModPreview.Load(Settings.installedMods[_currentSelectedIndex].Preview_url);
+               
+                if (!String.IsNullOrEmpty(Settings.installedMods[_currentSelectedIndex].Preview_url))
+                {
+                    pbModPreview.Load(Settings.installedMods[_currentSelectedIndex].Preview_url);
+                }
+                else
+                {
+                    pbModPreview.Image = null;
+                }
             }
         }
 
         private void DeleteFolder(string folder)
         {
-            Directory.Delete(folder, true);
+            if (Directory.Exists(folder))
+                Directory.Delete(folder, true);
+            else
+                Utils.Alert("Mod folder already deleted!", AlertForm.enmType.Error);
         }
 
         private void btnStartMod_Click(object sender, EventArgs e)

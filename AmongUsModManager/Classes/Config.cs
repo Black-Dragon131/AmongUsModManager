@@ -17,6 +17,11 @@ namespace AmongUsModManager
 		public string CreationDate { get; set; }
 		[XmlElement(ElementName = "description")]
 		public string Description { get; set; }
+		public bool Github { get; set; }
+		[XmlElement(ElementName = "download_BepInEx")]
+		public bool DownloadBepInEx { get; set; }
+		[XmlElement(ElementName = "needs_appid")]
+		public bool NeedsAppid { get; set; }
 
 	}
 

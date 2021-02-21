@@ -52,7 +52,7 @@ namespace AmongUsModManager
         #endregion
 
         private const int majorVersion = 0;
-        private const int minorVersion = 7;
+        private const int minorVersion = 8;
         private const string UPDATE_BASE_URL = "https://aumm.black-dragon131.de/";
         private const string UPDATE_JSON_NAME = "aumm.json";
         private const string UPDATE_NAME = "AmongUsModManager_new.exe";
@@ -170,7 +170,7 @@ namespace AmongUsModManager
 
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            var result = MessageBox.Show("Update Download complete. Would you like to install?", "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+            var result = MessageBox.Show("Update download complete. Would you like to install?", "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (result == DialogResult.Yes)
             {
                 Process.Start(UPDATER, UPDATE_NAME);
