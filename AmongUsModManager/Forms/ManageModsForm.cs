@@ -8,6 +8,8 @@ namespace AmongUsModManager.Forms
     public partial class ManageModsForm : Form
     {
         private int _currentSelectedIndex = -1;
+        private bool _isRunning = false;
+        Process auProc;
 
         public ManageModsForm()
         {
@@ -54,7 +56,7 @@ namespace AmongUsModManager.Forms
                 }
                 else
                 {
-                    pbModPreview.Image = null;
+                    pbModPreview.Image = AmongUsModManager.Properties.Resources.nopreview;
                 }
             }
         }
@@ -69,16 +71,69 @@ namespace AmongUsModManager.Forms
 
         private void btnStartMod_Click(object sender, EventArgs e)
         {
-            StartMod();
+            if (_isRunning)
+                StopAmongUs();
+            else
+                StartMod();
+        }
+
+        private void StopAmongUs()
+        {
+            try
+            {
+                auProc.Kill();
+                AUClosed();
+            }
+            catch (Exception)
+            {
+                Utils.Alert("Couldn' t close Among Us", AlertForm.enmType.Error);
+            }
         }
 
         private void StartMod()
         {
             if (_currentSelectedIndex >= 0)
             {
-                string startPath = Path.Combine(Settings.installedMods[_currentSelectedIndex].Location, Settings.exeName);
-                Process.Start(startPath);
+                try
+                {
+                    StartAmongUs();
+                }
+                catch (Exception)
+                {
+                    Utils.Alert("Couldn' t start Among Us", AlertForm.enmType.Error);
+                }
             }
+        }
+
+        private void StartAmongUs()
+        {
+            string startPath = Path.Combine(Settings.installedMods[_currentSelectedIndex].Location, Settings.exeName);
+
+            auProc = Process.Start(startPath);
+            auProc.EnableRaisingEvents = true;
+            auProc.Exited += AmongUs_Stopped;
+            btnStartMod.Text = "Stop Among Us";
+            btnStartMod.IconChar = FontAwesome.Sharp.IconChar.Stop;
+            _isRunning = true;
+            cbAvailableMods.Enabled = false;
+            Utils.Alert("Among Us started. This can take some time.", AlertForm.enmType.Success);
+
+            btnDeleteMod.Enabled = false;
+        }
+
+        private void AUClosed()
+        {
+            btnStartMod.Invoke(new Action(() => btnStartMod.Text = "Start"));
+            btnStartMod.Invoke(new Action(() => btnStartMod.IconChar = FontAwesome.Sharp.IconChar.Play));
+            
+            _isRunning = false;
+            btnDeleteMod.Invoke(new Action(() => btnDeleteMod.Enabled = true));
+            cbAvailableMods.Invoke(new Action(() => cbAvailableMods.Enabled = true)); 
+        }
+
+        private void AmongUs_Stopped(object sender, EventArgs e)
+        {
+            AUClosed();
         }
 
         private void btnDeleteMod_Click(object sender, EventArgs e)

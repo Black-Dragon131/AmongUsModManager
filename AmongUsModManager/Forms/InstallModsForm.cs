@@ -76,7 +76,6 @@ namespace AmongUsModManager.Forms
             lblDownloadStatus.Visible = false;
 
             _webClient.DownloadFileCompleted -= WebClient_DownloadAppIdCompleted;
-            Utils.DebugOutput("APPID downloaded");
         }
 
         private void WebClient_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -173,6 +172,9 @@ namespace AmongUsModManager.Forms
                 return;
             }
 
+            btnInstallMod.Enabled = false;
+            cbAvailableMods.Enabled = false;
+
             string parent = Directory.GetParent(Settings.amongUsPath).FullName;
 
             int id = GetCurrentId();
@@ -233,7 +235,9 @@ namespace AmongUsModManager.Forms
             }
             else
             {
-
+                _currentInstallingMod.CreationDate = DateTime.Now.ToString("s");
+                _webClient.DownloadFileCompleted += WebClient_DownloadModCompleted;
+                DoDownload(_availableMods[GetCurrentId()].Download_url, _currentModPath);
             }
         }
 
@@ -283,6 +287,9 @@ namespace AmongUsModManager.Forms
             Settings.SaveConfig();
 
             Utils.Alert($"{_currentInstallingMod.Name} installed.", AlertForm.enmType.Success);
+
+            btnInstallMod.Enabled = true;
+            cbAvailableMods.Enabled = true;
         }
 
         private bool CopyFolder(string sourceFolder, string destFolder)

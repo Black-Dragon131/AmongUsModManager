@@ -52,7 +52,7 @@ namespace AmongUsModManager
         #endregion
 
         private const int majorVersion = 0;
-        private const int minorVersion = 8;
+        private const int minorVersion = 9;
         private const string UPDATE_BASE_URL = "https://aumm.black-dragon131.de/";
         private const string UPDATE_JSON_NAME = "aumm.json";
         private const string UPDATE_NAME = "AmongUsModManager_new.exe";
