@@ -36,6 +36,7 @@ namespace AmongUsModManager.Forms
         private void Init()
         {
             _webClient = new WebClient();
+            _webClient.Headers.Add("user-agent", "Among Us Mod Manager");
             _webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
 
             _availableMods = new List<Mod>();
