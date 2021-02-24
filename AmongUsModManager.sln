@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmongUsModManager", "AmongU
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AUMMUpdater", "AUMMUpdater\AUMMUpdater.csproj", "{1E4CAAC3-B2DB-4530-9FAD-CEEAA0027AFB}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{24614512-6484-40B6-B8E3-022BB23A0C67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,9 @@ Global
 		{1E4CAAC3-B2DB-4530-9FAD-CEEAA0027AFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E4CAAC3-B2DB-4530-9FAD-CEEAA0027AFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E4CAAC3-B2DB-4530-9FAD-CEEAA0027AFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24614512-6484-40B6-B8E3-022BB23A0C67}.Debug|Any CPU.ActiveCfg = Debug
+		{24614512-6484-40B6-B8E3-022BB23A0C67}.Release|Any CPU.ActiveCfg = Release
+		{24614512-6484-40B6-B8E3-022BB23A0C67}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -82,7 +82,6 @@ namespace AmongUsModManager
             lblVersion.Text = $"AUMM v{majorVersion}.{minorVersion}";
             if (Settings.IsFirstRun())
             {
-                MessageBox.Show("It seems like this is the first start.\r\nTrying to find Among Us automatically.\r\nIf I can't find it you have to select the path manually!", "Info");
                 Settings.SearchInstallFolder();
                 Settings.SaveConfig();
             }
