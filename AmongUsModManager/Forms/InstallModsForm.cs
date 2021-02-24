@@ -36,7 +36,6 @@ namespace AmongUsModManager.Forms
         private void Init()
         {
             _webClient = new WebClient();
-            _webClient.Headers.Add("user-agent", "Among Us Mod Manager");
             _webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
 
             _availableMods = new List<Mod>();
@@ -106,6 +105,7 @@ namespace AmongUsModManager.Forms
                 Uri uri = new Uri(url);
                 string fileName = Path.GetFileName(uri.AbsolutePath);
 
+                _webClient.Headers.Add("user-agent", "Among Us Mod Manager");
                 _webClient.DownloadFileAsync(uri, location + "\\" + fileName);
             }
         }
