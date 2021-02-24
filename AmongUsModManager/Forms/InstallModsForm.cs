@@ -14,7 +14,11 @@ namespace AmongUsModManager.Forms
     public partial class InstallModsForm : Form
     {
         const string BASE_URL = "https://aumm.black-dragon131.de/";
+    #if DEBUG
+        const string MODS_XML = "mods_debug.xml";
+    #else
         const string MODS_XML = "mods.xml";
+    #endif
         const string APP_ID = "steam_appid.txt";
         const string BEPINEX = "BepInEx.zip";
         private bool _shouldHideProgress = false;
@@ -157,7 +161,7 @@ namespace AmongUsModManager.Forms
             }
             else
             {
-                pbModPreview.Image = null;
+                pbModPreview.Image = AmongUsModManager.Properties.Resources.nopreview;
             }
         }
 
