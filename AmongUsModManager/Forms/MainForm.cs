@@ -82,6 +82,7 @@ namespace AmongUsModManager
             lblVersion.Text = $"AUMM v{majorVersion}.{minorVersion}";
             if (Settings.IsFirstRun())
             {
+                MessageBox.Show("Install mods at your own risk.\nI am not responsible for any damage caused by installing and using mods!\nI am not the creator of the mods. Contact the author if you have problems with a mod!", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 Settings.SearchInstallFolder();
                 Settings.SaveConfig();
             }
