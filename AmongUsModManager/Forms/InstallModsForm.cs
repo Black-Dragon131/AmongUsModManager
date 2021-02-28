@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using FontAwesome.Sharp;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,14 +23,16 @@ namespace AmongUsModManager.Forms
         const string APP_ID = "steam_appid.txt";
         const string BEPINEX = "BepInEx.zip";
         private bool _shouldHideProgress = false;
+        private bool _updateMod = false;
         private WebClient _webClient;
-        private List<Mod> _availableMods;
         private string _currentModPath = "";
         private InstalledMod _currentInstallingMod;
+        private MainForm _mainform;
 
-        public InstallModsForm()
+        public InstallModsForm(MainForm mainForm)
         {
             InitializeComponent();
+            _mainform = mainForm;
             Init();
         }
 
@@ -38,7 +41,6 @@ namespace AmongUsModManager.Forms
             _webClient = new WebClient();
             _webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
 
-            _availableMods = new List<Mod>();
 
             DownloadModsXML();
         }
@@ -133,7 +135,7 @@ namespace AmongUsModManager.Forms
                 foreach (var item in data.Mod)
                 {
                     dataSource.Add(item);
-                    _availableMods.Add(item);
+                    ModUpdater.availableMods.Add(item);
                 }
             }
 
@@ -145,23 +147,43 @@ namespace AmongUsModManager.Forms
 
         private int GetCurrentId()
         {
-            return int.Parse((string)cbAvailableMods.SelectedValue);
+            return (int)cbAvailableMods.SelectedValue;
         }
 
         private void cbAvailableMods_SelectedIndexChanged(object sender, EventArgs e)
         {
             int id = GetCurrentId();
 
-            string text = _availableMods[id].Description.Replace("§", Environment.NewLine);
-            lblAuthorName.Text = _availableMods[id].Author;
+            string text = ModUpdater.availableMods[id].Description.Replace("§", Environment.NewLine);
+            lblAuthorName.Text = ModUpdater.availableMods[id].Author;
             txtModDescription.Text = text;
-            if (!String.IsNullOrEmpty(_availableMods[id].Preview_url))
+            if (!String.IsNullOrEmpty(ModUpdater.availableMods[id].Preview_url))
             {
-                pbModPreview.Load(_availableMods[id].Preview_url);
+                pbModPreview.Load(ModUpdater.availableMods[id].Preview_url);
             }
             else
             {
                 pbModPreview.Image = AmongUsModManager.Properties.Resources.nopreview;
+            }
+
+            if (ModUpdater.availableMods[id].Github && Settings.checkModUpdates)
+            {
+                if(ModUpdater.CheckForModUpdates(ModUpdater.availableMods[id].Id))
+                {
+                    _updateMod = true;
+
+                    btnInstallMod.BackColor = Utils.btnHighlightColor;
+                    btnInstallMod.Text = "Update";
+                    btnInstallMod.IconChar = IconChar.SyncAlt;
+                }
+                else
+                {
+                    ResetInstallButton();
+                }
+            }
+            else
+            {
+                ResetInstallButton();
             }
         }
 
@@ -173,25 +195,26 @@ namespace AmongUsModManager.Forms
                 return;
             }
 
+            _mainform.DisableTabs();
             btnInstallMod.Enabled = false;
             cbAvailableMods.Enabled = false;
 
             string parent = Directory.GetParent(Settings.amongUsPath).FullName;
 
             int id = GetCurrentId();
-            string dest = Settings.folderName + "_" + _availableMods[id].Name.Replace(" ", "");
+            string dest = Settings.folderName + "_" + ModUpdater.availableMods[id].Name.Replace(" ", "");
             _currentModPath = Path.Combine(parent, dest);
 
             bool copyOk = CopyFolder(Settings.amongUsPath, _currentModPath);
 
             _currentInstallingMod = new InstalledMod();
-            _currentInstallingMod.Name = _availableMods[id].Name;
-            _currentInstallingMod.Preview_url = _availableMods[id].Preview_url;
+            _currentInstallingMod.Name = ModUpdater.availableMods[id].Name;
+            _currentInstallingMod.Preview_url = ModUpdater.availableMods[id].Preview_url;
             _currentInstallingMod.Location = _currentModPath;
-            _currentInstallingMod.Id = id.ToString();
-            _currentInstallingMod.Description = _availableMods[id].Description;
-            _currentInstallingMod.DownloadBepInEx = _availableMods[id].DownloadBepInEx;
-            _currentInstallingMod.NeedsAppid = _availableMods[id].NeedsAppid;
+            _currentInstallingMod.Id = id;
+            _currentInstallingMod.Description = ModUpdater.availableMods[id].Description;
+            _currentInstallingMod.DownloadBepInEx = ModUpdater.availableMods[id].DownloadBepInEx;
+            _currentInstallingMod.NeedsAppid = ModUpdater.availableMods[id].NeedsAppid;
 
             if (copyOk)
             {
@@ -200,11 +223,20 @@ namespace AmongUsModManager.Forms
             }
         }
 
+        private void ResetInstallButton()
+        {
+            _updateMod = false;
+
+            btnInstallMod.BackColor = Utils.highlightColor;
+            btnInstallMod.Text = "Install";
+            btnInstallMod.IconChar = IconChar.Download;
+        }
+
         private void DownloadMod()
         {
-            if (_availableMods[GetCurrentId()].Github)
+            if (ModUpdater.availableMods[GetCurrentId()].Github)
             {
-                string url = $"https://api.github.com/repos/{_availableMods[GetCurrentId()].Download_url}/releases/latest";
+                string url = $"https://api.github.com/repos/{ModUpdater.availableMods[GetCurrentId()].Download_url}/releases/latest";
 
                 _webClient.Headers.Add("user-agent", "Among Us Mod Manager");
                 var json = _webClient.DownloadString(url);
@@ -238,7 +270,7 @@ namespace AmongUsModManager.Forms
             {
                 _currentInstallingMod.CreationDate = DateTime.Now.ToString("s");
                 _webClient.DownloadFileCompleted += WebClient_DownloadModCompleted;
-                DoDownload(_availableMods[GetCurrentId()].Download_url, _currentModPath);
+                DoDownload(ModUpdater.availableMods[GetCurrentId()].Download_url, _currentModPath);
             }
         }
 
@@ -287,24 +319,47 @@ namespace AmongUsModManager.Forms
             Settings.installedMods.Add(_currentInstallingMod);
             Settings.SaveConfig();
 
-            Utils.Alert($"{_currentInstallingMod.Name} installed.", AlertForm.enmType.Success);
+            if(_updateMod)
+                Utils.Alert($"{_currentInstallingMod.Name} updated.", AlertForm.enmType.Success);
+            else
+                Utils.Alert($"{_currentInstallingMod.Name} installed.", AlertForm.enmType.Success);
 
+            ResetInstallButton();
             btnInstallMod.Enabled = true;
             cbAvailableMods.Enabled = true;
+            _mainform.EnableTabs();
         }
 
         private bool CopyFolder(string sourceFolder, string destFolder)
         {
-            if (Directory.Exists(destFolder))
+            if(Settings.IsModInstalled(GetCurrentId()))
             {
-                var result = MessageBox.Show("Mod already installed. Reinstall it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                DialogResult result;
+
+                if (_updateMod)
+                    result = MessageBox.Show("Update mod?", "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                else
+                    result = MessageBox.Show("Mod already installed. Reinstall it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
                 if (result == DialogResult.No)
                     return false;
                 else
                     DeleteFolder(destFolder);
             }
 
-            Directory.CreateDirectory(destFolder);
+            if (Directory.Exists(destFolder))
+            {
+                DeleteFolder(destFolder);
+            }
+
+            try
+            {
+                Directory.CreateDirectory(destFolder);
+            }
+            catch (Exception)
+            {
+                Utils.Alert("Couldn't create mod folder! Try again...", AlertForm.enmType.Error);
+            }            
 
             string[] files = Directory.GetFiles(sourceFolder);
             foreach (string file in files)

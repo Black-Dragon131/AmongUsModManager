@@ -33,7 +33,7 @@ namespace AmongUsModManager.Forms
         private int GetCurrentId()
         {
             if (cbAvailableMods.DataSource != null)
-                return int.Parse((string)cbAvailableMods.SelectedValue);
+                return (int)cbAvailableMods.SelectedValue;
             else
                 return -1;
         }
@@ -41,7 +41,7 @@ namespace AmongUsModManager.Forms
         private void cbAvailableMods_SelectedIndexChanged(object sender, EventArgs e)
         {
             int id = GetCurrentId();
-            _currentSelectedIndex = Settings.installedMods.FindIndex(f => f.Id == id.ToString());
+            _currentSelectedIndex = Settings.installedMods.FindIndex(f => f.Id == id);
 
             if (_currentSelectedIndex >= 0)
             {
@@ -58,13 +58,39 @@ namespace AmongUsModManager.Forms
                 {
                     pbModPreview.Image = AmongUsModManager.Properties.Resources.nopreview;
                 }
+
+                if (ModUpdater.availableMods[id].Github && Settings.checkModUpdates)
+                {
+                    if (ModUpdater.CheckForModUpdates(ModUpdater.availableMods[id].Id))
+                    {
+                        lblUpdate.Visible = true;
+                    }
+                    else
+                    {
+                        lblUpdate.Visible = false;
+                    }
+                }
+                else
+                {
+                    lblUpdate.Visible = false;
+                }
             }
         }
 
         private void DeleteFolder(string folder)
         {
             if (Directory.Exists(folder))
-                Directory.Delete(folder, true);
+            {
+                try
+                {
+                    Directory.Delete(folder, true);
+                }
+                catch (Exception)
+                {
+                    Utils.Alert("Error deleting mod folder.", AlertForm.enmType.Error);
+                }
+                
+            }
             else
                 Utils.Alert("Mod folder already deleted!", AlertForm.enmType.Error);
         }

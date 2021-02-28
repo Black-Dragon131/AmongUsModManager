@@ -59,9 +59,8 @@ namespace AmongUsModManager
         private const string UPDATER = "AUMMUpdater.exe";
         private Form _activeTab;
         private Button _activeButton;
-        private readonly Color _highlightColor = Color.FromArgb(79, 93, 117);
-        private readonly Color _normalColor = Color.FromArgb(45, 49, 66);
         private WebClient _webClient;
+        private bool _canSwitchTab = true;
 
         public MainForm()
         {
@@ -73,7 +72,7 @@ namespace AmongUsModManager
 
             if (_activeTab == null)
             {
-                ChangeTab(new InstallModsForm(), btnMenuInstallMods);
+                ChangeTab(new InstallModsForm(this), btnMenuInstallMods);
             }
         }
 
@@ -112,6 +111,9 @@ namespace AmongUsModManager
 
         private void ChangeTab(Form newTab, object btnSender)
         {
+            if (!_canSwitchTab)
+                return;
+
             if (_activeTab != null)
             {
                 _activeTab.Close();
@@ -133,11 +135,11 @@ namespace AmongUsModManager
         {
             if (_activeButton != null)
             {
-                _activeButton.BackColor = _normalColor;
+                _activeButton.BackColor = Utils.normalColor;
             }
 
             _activeButton = button;
-            button.BackColor = _highlightColor;
+            button.BackColor = Utils.highlightColor;
         }
 
         private void btnClose_Click(object sender, EventArgs e)
@@ -147,7 +149,7 @@ namespace AmongUsModManager
 
         private void btnMenuInstallMods_Click(object sender, EventArgs e)
         {
-            ChangeTab(new InstallModsForm(), sender);
+            ChangeTab(new InstallModsForm(this), sender);
         }
 
         private void btnMenuSettings_Click(object sender, EventArgs e)
@@ -176,6 +178,16 @@ namespace AmongUsModManager
                 Process.Start(UPDATER, UPDATE_NAME);
                 Environment.Exit(0);
             }
+        }
+
+        public void DisableTabs()
+        {
+            _canSwitchTab = false;
+        }
+
+        public void EnableTabs()
+        {
+            _canSwitchTab = true;
         }
     }
 }
