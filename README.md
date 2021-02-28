@@ -17,3 +17,5 @@ See https://aumm.black-dragon131.de/ for more information and download.
 
 # Planned features
 - Install mods together (2 or more mods in same instance)
+
+# If you are running version 0.9 or lower you have to start AUMM as admin to run a succesful update!
