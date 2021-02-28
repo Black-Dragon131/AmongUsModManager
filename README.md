@@ -3,6 +3,9 @@ Among Us Mod Manager makes it easy to download, install and manage mods for the 
 
 See https://aumm.black-dragon131.de/ for more information and download.
 
+![alt text](https://aumm.black-dragon131.de/img/img_install.png)
+![alt text](https://aumm.black-dragon131.de/img/img_manage.png)
+
 # Features
 - Download and install mods
 - Auto detect Among Us path
