@@ -82,6 +82,7 @@ namespace AmongUsModManager
             {
                 Directory.CreateDirectory(configDir);
                 checkAummUpdates = true;
+                checkModUpdates = true;
             }
 
             XmlSerializer xsSubmit = new XmlSerializer(typeof(Config));
@@ -163,6 +164,32 @@ namespace AmongUsModManager
             }
 
             return installPath.ToString();
+        }
+
+        public static bool IsModInstalled(int id)
+        {
+            foreach (InstalledMod mod in installedMods)
+            {
+                if (mod.Id == id)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static string GetInstalledModDate(int id)
+        {
+            foreach (InstalledMod mod in installedMods)
+            {
+                if (mod.Id == id)
+                {
+                    return mod.CreationDate;
+                }
+            }
+
+            return null;
         }
     }
 }

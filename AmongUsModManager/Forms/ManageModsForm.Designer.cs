@@ -35,6 +35,7 @@ namespace AmongUsModManager.Forms
             this.pbModPreview = new System.Windows.Forms.PictureBox();
             this.btnStartMod = new FontAwesome.Sharp.IconButton();
             this.btnDeleteMod = new FontAwesome.Sharp.IconButton();
+            this.lblUpdate = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbModPreview)).BeginInit();
             this.SuspendLayout();
             // 
@@ -91,10 +92,10 @@ namespace AmongUsModManager.Forms
             this.btnStartMod.IconColor = System.Drawing.Color.White;
             this.btnStartMod.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnStartMod.IconSize = 32;
-            this.btnStartMod.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.btnStartMod.ImageAlign = System.Drawing.ContentAlignment.TopRight;
             this.btnStartMod.Location = new System.Drawing.Point(354, 278);
             this.btnStartMod.Name = "btnStartMod";
-            this.btnStartMod.Size = new System.Drawing.Size(276, 41);
+            this.btnStartMod.Size = new System.Drawing.Size(276, 40);
             this.btnStartMod.TabIndex = 4;
             this.btnStartMod.Text = "Start";
             this.btnStartMod.UseVisualStyleBackColor = false;
@@ -112,14 +113,25 @@ namespace AmongUsModManager.Forms
             this.btnDeleteMod.IconColor = System.Drawing.Color.White;
             this.btnDeleteMod.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnDeleteMod.IconSize = 32;
-            this.btnDeleteMod.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.btnDeleteMod.Location = new System.Drawing.Point(354, 325);
+            this.btnDeleteMod.ImageAlign = System.Drawing.ContentAlignment.TopRight;
+            this.btnDeleteMod.Location = new System.Drawing.Point(354, 324);
             this.btnDeleteMod.Name = "btnDeleteMod";
-            this.btnDeleteMod.Size = new System.Drawing.Size(276, 41);
+            this.btnDeleteMod.Size = new System.Drawing.Size(276, 40);
             this.btnDeleteMod.TabIndex = 5;
             this.btnDeleteMod.Text = "Delete";
             this.btnDeleteMod.UseVisualStyleBackColor = false;
             this.btnDeleteMod.Click += new System.EventHandler(this.btnDeleteMod_Click);
+            // 
+            // lblUpdate
+            // 
+            this.lblUpdate.AutoSize = true;
+            this.lblUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblUpdate.Location = new System.Drawing.Point(362, 375);
+            this.lblUpdate.Name = "lblUpdate";
+            this.lblUpdate.Size = new System.Drawing.Size(263, 17);
+            this.lblUpdate.TabIndex = 6;
+            this.lblUpdate.Text = "Update available! Go to install to update.";
+            this.lblUpdate.Visible = false;
             // 
             // ManageModsForm
             // 
@@ -127,6 +139,7 @@ namespace AmongUsModManager.Forms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(642, 410);
+            this.Controls.Add(this.lblUpdate);
             this.Controls.Add(this.btnDeleteMod);
             this.Controls.Add(this.btnStartMod);
             this.Controls.Add(this.pbModPreview);
@@ -151,5 +164,6 @@ namespace AmongUsModManager.Forms
         private System.Windows.Forms.PictureBox pbModPreview;
         private FontAwesome.Sharp.IconButton btnStartMod;
         private FontAwesome.Sharp.IconButton btnDeleteMod;
+        private System.Windows.Forms.Label lblUpdate;
     }
 }

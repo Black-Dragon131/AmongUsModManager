@@ -56,7 +56,6 @@ namespace AmongUsModManager.Forms
             this.cbModUpdates.TabIndex = 2;
             this.cbModUpdates.Text = "Check for Mod Updates";
             this.cbModUpdates.UseVisualStyleBackColor = true;
-            this.cbModUpdates.Visible = false;
             this.cbModUpdates.CheckedChanged += new System.EventHandler(this.cbModUpdates_CheckedChanged);
             // 
             // txtBoxPath

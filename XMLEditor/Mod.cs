@@ -23,7 +23,7 @@ namespace AmongUsModManager
 		[XmlElement(ElementName = "needs_appid")]
 		public bool NeedsAppid { get; set; }
 		[XmlElement(ElementName = "id")]
-		public int Id { get; set; }
+		public string Id { get; set; }
 	}
 
 	[XmlRoot(ElementName = "mods")]

@@ -38,7 +38,6 @@ namespace AmongUsModManager.Forms
             this.txtModDescription = new System.Windows.Forms.TextBox();
             this.pbModPreview = new System.Windows.Forms.PictureBox();
             this.btnInstallMod = new FontAwesome.Sharp.IconButton();
-            this.btnUpdate = new FontAwesome.Sharp.IconButton();
             this.pgrbDownload = new AmongUsModManager.CustomProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.pbModPreview)).BeginInit();
             this.SuspendLayout();
@@ -112,7 +111,8 @@ namespace AmongUsModManager.Forms
             this.txtModDescription.ReadOnly = true;
             this.txtModDescription.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.txtModDescription.Size = new System.Drawing.Size(336, 289);
-            this.txtModDescription.TabIndex = 6;
+            this.txtModDescription.TabIndex = 2;
+            this.txtModDescription.TabStop = false;
             // 
             // pbModPreview
             // 
@@ -144,28 +144,6 @@ namespace AmongUsModManager.Forms
             this.btnInstallMod.UseVisualStyleBackColor = false;
             this.btnInstallMod.Click += new System.EventHandler(this.btnInstallMod_Click);
             // 
-            // btnUpdate
-            // 
-            this.btnUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(93)))), ((int)(((byte)(117)))));
-            this.btnUpdate.Enabled = false;
-            this.btnUpdate.FlatAppearance.BorderSize = 0;
-            this.btnUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnUpdate.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
-            this.btnUpdate.ForeColor = System.Drawing.Color.White;
-            this.btnUpdate.IconChar = FontAwesome.Sharp.IconChar.SyncAlt;
-            this.btnUpdate.IconColor = System.Drawing.Color.White;
-            this.btnUpdate.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.btnUpdate.IconSize = 32;
-            this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
-            this.btnUpdate.Location = new System.Drawing.Point(354, 337);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Padding = new System.Windows.Forms.Padding(20, 0, 20, 0);
-            this.btnUpdate.Size = new System.Drawing.Size(276, 43);
-            this.btnUpdate.TabIndex = 9;
-            this.btnUpdate.Text = "Update";
-            this.btnUpdate.UseVisualStyleBackColor = false;
-            this.btnUpdate.Visible = false;
-            // 
             // pgrbDownload
             // 
             this.pgrbDownload.Location = new System.Drawing.Point(138, 383);
@@ -181,7 +159,6 @@ namespace AmongUsModManager.Forms
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(191)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.ClientSize = new System.Drawing.Size(642, 410);
             this.Controls.Add(this.pgrbDownload);
-            this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnInstallMod);
             this.Controls.Add(this.pbModPreview);
             this.Controls.Add(this.txtModDescription);
@@ -212,7 +189,6 @@ namespace AmongUsModManager.Forms
         private System.Windows.Forms.TextBox txtModDescription;
         private System.Windows.Forms.PictureBox pbModPreview;
         private FontAwesome.Sharp.IconButton btnInstallMod;
-        private FontAwesome.Sharp.IconButton btnUpdate;
         private CustomProgressBar pgrbDownload;
     }
 }

@@ -68,6 +68,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Classes\Mod.cs" />
+    <Compile Include="Classes\ModUpdater.cs" />
     <Compile Include="Classes\Settings.cs" />
     <Compile Include="Classes\Utils.cs" />
     <Compile Include="Forms\AlertForm.cs">

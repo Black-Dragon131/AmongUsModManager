@@ -12,7 +12,7 @@ namespace AmongUsModManager
 		[XmlElement(ElementName = "location")]
 		public string Location { get; set; }
 		[XmlElement(ElementName = "id")]
-		public string Id { get; set; }
+		public int Id { get; set; }
 		[XmlElement(ElementName = "creationDate")]
 		public string CreationDate { get; set; }
 		[XmlElement(ElementName = "description")]
