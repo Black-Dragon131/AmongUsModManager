@@ -13,7 +13,7 @@ See https://aumm.black-dragon131.de/ for more information and download.
 - Start mod via AUMM
 - Many mods included. Hopefully more to come.
 - Auto Updater for AUMM
+- Updater for mods
 
 # Planned features
-- Updater for mods
 - Install mods together (2 or more mods in same instance)
