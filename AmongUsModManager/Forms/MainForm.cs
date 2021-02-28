@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace AmongUsModManager
@@ -52,9 +53,14 @@ namespace AmongUsModManager
         #endregion
 
         private const int majorVersion = 0;
-        private const int minorVersion = 9;
+        private const int minorVersion = 11;
         private const string UPDATE_BASE_URL = "https://aumm.black-dragon131.de/";
-        private const string UPDATE_JSON_NAME = "aumm.json";
+
+        #if DEBUG
+            private const string UPDATE_JSON_NAME = "aumm_debug.json";
+        #else
+            private const string UPDATE_JSON_NAME = "aumm.json";
+        #endif
         private const string UPDATE_NAME = "AmongUsModManager_new.exe";
         private const string UPDATER = "AUMMUpdater.exe";
         private Form _activeTab;
@@ -164,10 +170,26 @@ namespace AmongUsModManager
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            _webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
-            Uri uri = new Uri(Path.Combine(UPDATE_BASE_URL, UPDATE_NAME));
-            string location = Application.StartupPath;
-            _webClient.DownloadFileAsync(uri, location + "\\" + UPDATE_NAME);
+            bool isElevated;
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                isElevated = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+
+            if (isElevated)
+            {
+                _webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+                Uri uri = new Uri(Path.Combine(UPDATE_BASE_URL, UPDATE_NAME));
+                string location = Application.StartupPath;
+
+                _webClient.DownloadFileAsync(uri, location + "\\" + UPDATE_NAME);
+            }
+            else
+            {
+                MessageBox.Show("Update requires Admin rights. Restart with admin privilege","Warning",MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Utils.Alert("Restart with admin privilege.", AlertForm.enmType.Warning);
+            }
         }
 
         private void WebClient_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
