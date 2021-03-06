@@ -126,6 +126,7 @@ namespace AmongUsModManager.Forms
             // btnInstallMod
             // 
             this.btnInstallMod.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(79)))), ((int)(((byte)(93)))), ((int)(((byte)(117)))));
+            this.btnInstallMod.Enabled = false;
             this.btnInstallMod.FlatAppearance.BorderSize = 0;
             this.btnInstallMod.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnInstallMod.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
