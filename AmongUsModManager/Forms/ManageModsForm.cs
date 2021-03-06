@@ -52,11 +52,18 @@ namespace AmongUsModManager.Forms
                
                 if (!String.IsNullOrEmpty(Settings.installedMods[_currentSelectedIndex].Preview_url))
                 {
-                    pbModPreview.Load(Settings.installedMods[_currentSelectedIndex].Preview_url);
+                    try
+                    {
+                        pbModPreview.Load(Settings.installedMods[_currentSelectedIndex].Preview_url);
+                    }
+                    catch (Exception)
+                    {
+                        pbModPreview.Image = Properties.Resources.nopreview;
+                    }
                 }
                 else
                 {
-                    pbModPreview.Image = AmongUsModManager.Properties.Resources.nopreview;
+                    pbModPreview.Image = Properties.Resources.nopreview;
                 }
 
                 if (ModUpdater.availableMods[id].Github && Settings.checkModUpdates)

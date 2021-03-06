@@ -177,11 +177,18 @@ namespace AmongUsModManager.Forms
             txtModDescription.Text = text;
             if (!String.IsNullOrEmpty(ModUpdater.availableMods[id].Preview_url))
             {
-                pbModPreview.Load(ModUpdater.availableMods[id].Preview_url);
+                try
+                {
+                    pbModPreview.Load(ModUpdater.availableMods[id].Preview_url);
+                }
+                catch (Exception)
+                {
+                    pbModPreview.Image = Properties.Resources.nopreview;
+                }
             }
             else
             {
-                pbModPreview.Image = AmongUsModManager.Properties.Resources.nopreview;
+                pbModPreview.Image = Properties.Resources.nopreview;
             }
 
             if (ModUpdater.availableMods[id].Github && Settings.checkModUpdates)
