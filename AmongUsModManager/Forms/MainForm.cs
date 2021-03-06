@@ -7,7 +7,6 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Security.Principal;
 using System.Windows.Forms;
 
 namespace AmongUsModManager
@@ -52,8 +51,6 @@ namespace AmongUsModManager
          );
         #endregion
 
-        private const int majorVersion = 0;
-        private const int minorVersion = 11;
         private const string UPDATE_BASE_URL = "https://aumm.black-dragon131.de/";
 
         #if DEBUG
@@ -84,7 +81,7 @@ namespace AmongUsModManager
 
         private void Init()
         {
-            lblVersion.Text = $"AUMM v{majorVersion}.{minorVersion}";
+            lblVersion.Text = $"AUMM v{Utils.majorVersion}.{Utils.minorVersion}";
             if (Settings.IsFirstRun())
             {
                 MessageBox.Show("Install mods at your own risk.\nI am not responsible for any damage caused by installing and using mods!\nI am not the creator of the mods. Contact the author if you have problems with a mod!", "WARNING", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -102,13 +99,14 @@ namespace AmongUsModManager
         {
             string url = Path.Combine(UPDATE_BASE_URL, UPDATE_JSON_NAME);
 
+            _webClient.Headers.Add("user-agent", Utils.userAgent);
             string json = _webClient.DownloadString(url);
 
             JObject aummUpdate = JObject.Parse(json);
             int remoteMajorVersion = (int)aummUpdate["version"]["major_version"];
             int remoteMinorVersion = (int)aummUpdate["version"]["minor_version"];
 
-            if (remoteMajorVersion > majorVersion || remoteMinorVersion > minorVersion)
+            if (remoteMajorVersion > Utils.majorVersion || (remoteMajorVersion >= Utils.majorVersion && remoteMinorVersion > Utils.minorVersion))
             {
                 Utils.Alert("New AUMM version aviable.", AlertForm.enmType.Info);
                 btnUpdate.Visible = true;
@@ -170,14 +168,7 @@ namespace AmongUsModManager
 
         private void btnUpdate_Click(object sender, EventArgs e)
         {
-            bool isElevated;
-            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
-            {
-                WindowsPrincipal principal = new WindowsPrincipal(identity);
-                isElevated = principal.IsInRole(WindowsBuiltInRole.Administrator);
-            }
-
-            if (isElevated)
+            if (Utils.IsAdministrator() || Utils.hasWriteAccess(Application.StartupPath))
             {
                 _webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
                 Uri uri = new Uri(Path.Combine(UPDATE_BASE_URL, UPDATE_NAME));
@@ -187,8 +178,24 @@ namespace AmongUsModManager
             }
             else
             {
-                MessageBox.Show("Update requires Admin rights. Restart with admin privilege","Warning",MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                Utils.Alert("Restart with admin privilege.", AlertForm.enmType.Warning);
+                var result = MessageBox.Show("Update requires Admin rights. Restart with admin privilege?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.Yes)
+                {
+                    string aumm = Process.GetCurrentProcess().MainModule.FileName;
+                    ProcessStartInfo info = new ProcessStartInfo(aumm);
+                    info.UseShellExecute = true;
+                    info.Verb = "runas";
+                    try
+                    {
+                        Process.Start(info);
+
+                        Environment.Exit(0);
+                    }
+                    catch (Exception)
+                    {
+                        Utils.Alert("Couldn' t restart AUMM", AlertForm.enmType.Error);
+                    }
+                }
             }
         }
 
@@ -197,19 +204,39 @@ namespace AmongUsModManager
             var result = MessageBox.Show("Update download complete. Would you like to install?", "Info", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
             if (result == DialogResult.Yes)
             {
-                Process.Start(UPDATER, UPDATE_NAME);
-                Environment.Exit(0);
+                if (File.Exists(UPDATER))
+                {
+                    try
+                    {
+                        Process.Start(UPDATER, UPDATE_NAME);
+                        Environment.Exit(0);
+                    }
+                    catch (Exception)
+                    {
+                        Utils.Alert("Couldn' t start updater.", AlertForm.enmType.Error);
+                    }
+                }
+                else
+                {
+                    Utils.Alert("Updater not found! Was it deleted?", AlertForm.enmType.Error);
+                }
             }
         }
 
         public void DisableTabs()
         {
             _canSwitchTab = false;
+            btnMenuInstallMods.Enabled = false;
+            btnMenuManageMods.Enabled = false;
+            btnMenuSettings.Enabled = false;
         }
 
         public void EnableTabs()
         {
             _canSwitchTab = true;
+            btnMenuInstallMods.Enabled = true;
+            btnMenuManageMods.Enabled = true;
+            btnMenuSettings.Enabled = true;
         }
     }
 }

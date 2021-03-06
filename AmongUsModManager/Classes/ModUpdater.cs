@@ -20,7 +20,7 @@ namespace AmongUsModManager
             string url = $"https://api.github.com/repos/{availableMods[modId].Download_url}/releases/latest";
 
             WebClient _webClient = new WebClient();
-            _webClient.Headers.Add("user-agent", "Among Us Mod Manager");
+            _webClient.Headers.Add("user-agent", Utils.userAgent);
             var json = _webClient.DownloadString(url);
             JObject modInfo = JObject.Parse(json);
 

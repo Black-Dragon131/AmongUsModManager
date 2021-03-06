@@ -14,8 +14,8 @@ namespace AmongUsModManager
         public static string folderName = "Among Us";
         public static string exeName = "Among Us.exe";
         public static string amongUsPath;
-        public static bool checkModUpdates;
-        public static bool checkAummUpdates;
+        public static bool checkModUpdates = true;
+        public static bool checkAummUpdates = true;
         public static string configDir;
         public static List<InstalledMod> installedMods;
 
@@ -59,14 +59,32 @@ namespace AmongUsModManager
             var serializer = new XmlSerializer(typeof(Config));
             using (StreamReader file = File.OpenText(_configFile))
             {
-                Config data = (Config)serializer.Deserialize(file);
-                amongUsPath = data.AmongUsPath;
-                checkModUpdates = data.CheckModUpdates;
-                checkAummUpdates = data.CheckAummUpdates;
-
-                foreach (var item in data.InstalledMods.InstalledMod)
+                try
                 {
-                    installedMods.Add(item);
+                    Config data = (Config)serializer.Deserialize(file);
+                    amongUsPath = data.AmongUsPath;
+                    checkModUpdates = data.CheckModUpdates;
+                    checkAummUpdates = data.CheckAummUpdates;
+
+                    foreach (var item in data.InstalledMods.InstalledMod)
+                    {
+                        installedMods.Add(item);
+                    }
+                }
+                catch (Exception)
+                {
+                    try
+                    {
+                        file.Close();
+                        File.Delete(_configFile);
+                        SearchInstallFolder();
+                        SaveConfig();
+                        Utils.Alert("settings.xml was corrupt. I recreated it!", AlertForm.enmType.Warning);
+                    }
+                    catch (Exception)
+                    {
+                        Utils.Alert("settings.xml is corrupt, but I couldn' t fix it myself!", AlertForm.enmType.Error);
+                    }
                 }
             }
 
@@ -80,9 +98,15 @@ namespace AmongUsModManager
             // Check if config dir exists and create one if not
             if (!Directory.Exists(configDir))
             {
-                Directory.CreateDirectory(configDir);
-                checkAummUpdates = true;
-                checkModUpdates = true;
+                try
+                {
+                    Directory.CreateDirectory(configDir);
+                }
+                catch (Exception)
+                {
+                    Utils.Alert("Couldn 't create config folder!", AlertForm.enmType.Error);
+                }
+                
             }
 
             XmlSerializer xsSubmit = new XmlSerializer(typeof(Config));

@@ -84,6 +84,7 @@ namespace AmongUsModManager.Forms
                 try
                 {
                     Directory.Delete(folder, true);
+                    Utils.Alert("Mod deleted.", AlertForm.enmType.Success);
                 }
                 catch (Exception)
                 {

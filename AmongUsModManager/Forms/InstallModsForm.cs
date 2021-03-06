@@ -22,7 +22,6 @@ namespace AmongUsModManager.Forms
     #endif
         const string APP_ID = "steam_appid.txt";
         const string BEPINEX = "BepInEx.zip";
-        private bool _shouldHideProgress = false;
         private bool _updateMod = false;
         private WebClient _webClient;
         private string _currentModPath = "";
@@ -41,14 +40,19 @@ namespace AmongUsModManager.Forms
             _webClient = new WebClient();
             _webClient.DownloadProgressChanged += WebClient_DownloadProgressChanged;
 
-
             DownloadModsXML();
+        }
+
+        private void HideDownloadProgress()
+        {
+            pgrbDownload.Value = 0;
+            pgrbDownload.Visible = false;
+            lblDownloadStatus.Visible = false;
         }
 
         private void WebClient_DownloadModsXmlCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            pgrbDownload.Visible = false;
-            lblDownloadStatus.Visible = false;
+            HideDownloadProgress();
 
             _webClient.DownloadFileCompleted -= WebClient_DownloadModsXmlCompleted;
             PopulateList();
@@ -56,8 +60,7 @@ namespace AmongUsModManager.Forms
 
         private void WebClient_DownloadModCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            pgrbDownload.Visible = false;
-            lblDownloadStatus.Visible = false;
+            HideDownloadProgress();
 
             _webClient.DownloadFileCompleted -= WebClient_DownloadModCompleted;
             ExtractMod(_currentModPath);
@@ -65,8 +68,7 @@ namespace AmongUsModManager.Forms
 
         private void WebClient_DownloadBepInExCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            pgrbDownload.Visible = false;
-            lblDownloadStatus.Visible = false;
+            HideDownloadProgress();
 
             _webClient.DownloadFileCompleted -= WebClient_DownloadBepInExCompleted;
             DownloadMod();
@@ -74,8 +76,7 @@ namespace AmongUsModManager.Forms
 
         private void WebClient_DownloadAppIdCompleted(object sender, AsyncCompletedEventArgs e)
         {
-            pgrbDownload.Visible = false;
-            lblDownloadStatus.Visible = false;
+            HideDownloadProgress();
 
             _webClient.DownloadFileCompleted -= WebClient_DownloadAppIdCompleted;
         }
@@ -94,31 +95,36 @@ namespace AmongUsModManager.Forms
             }));
         }
 
-        private void DoDownload(string url, string location)
+        private void DoDownload(string url, string location, bool hidePropgress)
         {
             if (!string.IsNullOrEmpty(url))
-            {
-                if (!_shouldHideProgress)
+            {                
+                if (hidePropgress)
                 {
+                    HideDownloadProgress();
+                }
+                else
+                { 
+                    pgrbDownload.Value = 0;
                     pgrbDownload.Visible = true;
-                    lblDownloadStatus.Text = "";
+                    lblDownloadStatus.Text = "Downloaded 0%";
                     lblDownloadStatus.Visible = true;
                 }
+
                 Uri uri = new Uri(url);
                 string fileName = Path.GetFileName(uri.AbsolutePath);
 
-                _webClient.Headers.Add("user-agent", "Among Us Mod Manager");
+                _webClient.Headers.Add("user-agent", Utils.userAgent);
                 _webClient.DownloadFileAsync(uri, location + "\\" + fileName);
             }
         }
 
         private void DownloadModsXML()
         {
-            _shouldHideProgress = true;
             string url = Path.Combine(BASE_URL, MODS_XML);
 
             _webClient.DownloadFileCompleted += WebClient_DownloadModsXmlCompleted;
-            DoDownload(url, Settings.configDir);
+            DoDownload(url, Settings.configDir, true);
         }
 
         private void PopulateList()
@@ -131,12 +137,24 @@ namespace AmongUsModManager.Forms
             var dataSource = new List<Mod>();
             using (var file = File.OpenText(xml))
             {
-                Mods data = (Mods)serializer.Deserialize(file);
-                foreach (var item in data.Mod)
+                try
                 {
-                    dataSource.Add(item);
-                    ModUpdater.availableMods.Add(item);
+                    Mods data = (Mods)serializer.Deserialize(file);
+                    foreach (var item in data.Mod)
+                    {
+                        dataSource.Add(item);
+                        ModUpdater.availableMods.Add(item);
+                    }
+
+                    btnInstallMod.Enabled = true;
                 }
+                catch (Exception)
+                {
+                    _mainform.DisableTabs();
+                    Utils.Alert("mods.xml is corrupt. Try again later.", AlertForm.enmType.Error);
+                    Utils.Alert("If the error persists open an issue please.", AlertForm.enmType.Info);
+                }
+               
             }
 
             //Setup data binding
@@ -205,7 +223,7 @@ namespace AmongUsModManager.Forms
             string dest = Settings.folderName + "_" + ModUpdater.availableMods[id].Name.Replace(" ", "");
             _currentModPath = Path.Combine(parent, dest);
 
-            bool copyOk = CopyFolder(Settings.amongUsPath, _currentModPath);
+            bool copyOk = CopyAUFolder();
 
             _currentInstallingMod = new InstalledMod();
             _currentInstallingMod.Name = ModUpdater.availableMods[id].Name;
@@ -218,7 +236,6 @@ namespace AmongUsModManager.Forms
 
             if (copyOk)
             {
-                _shouldHideProgress = false;
                 DownloadBepInEx();
             }
         }
@@ -238,7 +255,7 @@ namespace AmongUsModManager.Forms
             {
                 string url = $"https://api.github.com/repos/{ModUpdater.availableMods[GetCurrentId()].Download_url}/releases/latest";
 
-                _webClient.Headers.Add("user-agent", "Among Us Mod Manager");
+                _webClient.Headers.Add("user-agent", Utils.userAgent);
                 var json = _webClient.DownloadString(url);
                 JObject modInfo = JObject.Parse(json);
 
@@ -264,13 +281,13 @@ namespace AmongUsModManager.Forms
 
                 _webClient.DownloadFileCompleted += WebClient_DownloadModCompleted;
 
-                DoDownload(downloadUrl, _currentModPath);
+                DoDownload(downloadUrl, _currentModPath, false);
             }
             else
             {
                 _currentInstallingMod.CreationDate = DateTime.Now.ToString("s");
                 _webClient.DownloadFileCompleted += WebClient_DownloadModCompleted;
-                DoDownload(ModUpdater.availableMods[GetCurrentId()].Download_url, _currentModPath);
+                DoDownload(ModUpdater.availableMods[GetCurrentId()].Download_url, _currentModPath, false);
             }
         }
 
@@ -291,8 +308,8 @@ namespace AmongUsModManager.Forms
             {
                 string downloadUrl = Path.Combine(BASE_URL, APP_ID);
                 _webClient.DownloadFileCompleted += WebClient_DownloadAppIdCompleted;
-                _shouldHideProgress = false;
-                DoDownload(downloadUrl, _currentModPath);
+
+                DoDownload(downloadUrl, _currentModPath, false);
             }
         }
 
@@ -303,13 +320,14 @@ namespace AmongUsModManager.Forms
                 _webClient.DownloadFileCompleted += WebClient_DownloadBepInExCompleted;
             
                 string downloadUrl = Path.Combine(BASE_URL, BEPINEX);
-                DoDownload(downloadUrl, _currentModPath);
+                DoDownload(downloadUrl, _currentModPath, false);
             }
             else
             {
                 DownloadMod();
             }
         }
+
         private void AddModToInstalledMods()
         {
             int index = Settings.installedMods.FindIndex(f => f.Id == _currentInstallingMod.Id);
@@ -330,9 +348,9 @@ namespace AmongUsModManager.Forms
             _mainform.EnableTabs();
         }
 
-        private bool CopyFolder(string sourceFolder, string destFolder)
+        private bool CopyAUFolder()
         {
-            if(Settings.IsModInstalled(GetCurrentId()))
+            if (Settings.IsModInstalled(GetCurrentId()))
             {
                 DialogResult result;
 
@@ -343,10 +361,19 @@ namespace AmongUsModManager.Forms
 
                 if (result == DialogResult.No)
                     return false;
-                else
-                    DeleteFolder(destFolder);
             }
 
+            if (String.IsNullOrEmpty(_currentModPath))
+            {
+                Utils.Alert("Mod path not set!", AlertForm.enmType.Error);
+                return false;
+            }
+
+            return CopyFolder(Settings.amongUsPath, _currentModPath);
+        }
+
+        private bool CopyFolder(string sourceFolder, string destFolder)
+        {
             if (Directory.Exists(destFolder))
             {
                 DeleteFolder(destFolder);
@@ -358,7 +385,7 @@ namespace AmongUsModManager.Forms
             }
             catch (Exception)
             {
-                Utils.Alert("Couldn't create mod folder! Try again...", AlertForm.enmType.Error);
+                Utils.Alert("Couldn' t create mod folder! Try again...", AlertForm.enmType.Error);
             }            
 
             string[] files = Directory.GetFiles(sourceFolder);
@@ -390,7 +417,15 @@ namespace AmongUsModManager.Forms
 
         private void DeleteFolder(string folder)
         {
-            Directory.Delete(folder, true);
+            try
+            {
+                Directory.Delete(folder, true);
+            }
+            catch (Exception)
+            {
+                Utils.Alert("Couldn' t delete folder!", AlertForm.enmType.Error);
+            }
+            
         }
 
         private void btnInstallMod_Click(object sender, EventArgs e)
