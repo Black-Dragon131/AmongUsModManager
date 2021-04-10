@@ -41,6 +41,8 @@ namespace AmongUsModManager
 		public bool CheckModUpdates { get; set; }
 		[XmlElement(ElementName = "checkAummUpdates")]
 		public bool CheckAummUpdates { get; set; }
+		[XmlElement(ElementName = "updaterVersion")]
+		public int UpdaterVersion { get; set; }
 		[XmlElement(ElementName = "installedMods")]
 		public InstalledMods InstalledMods { get; set; }
 	}
