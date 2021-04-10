@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using AmongUsModManager.Forms;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -21,8 +22,29 @@ namespace AmongUsModManager
 
             WebClient _webClient = new WebClient();
             _webClient.Headers.Add("user-agent", Utils.userAgent);
-            var json = _webClient.DownloadString(url);
-            JObject modInfo = JObject.Parse(json);
+
+            string json;
+
+            try
+            {
+                json = _webClient.DownloadString(url);
+            }
+            catch (Exception)
+            {
+                Utils.Alert("Couldn' t get version from github", AlertForm.enmType.Error);
+                return null;
+            }
+            
+            JObject modInfo;
+            try
+            {
+                modInfo = JObject.Parse(json);
+            }
+            catch (Exception)
+            {
+                Utils.Alert("Couldn' t parse json from github", AlertForm.enmType.Error);
+                return null;
+            }
 
             JArray items = (JArray)modInfo["assets"];
             int length = items.Count;

@@ -114,8 +114,16 @@ namespace AmongUsModManager.Forms
                 Uri uri = new Uri(url);
                 string fileName = Path.GetFileName(uri.AbsolutePath);
 
-                _webClient.Headers.Add("user-agent", Utils.userAgent);
-                _webClient.DownloadFileAsync(uri, location + "\\" + fileName);
+                try
+                {
+                    _webClient.Headers.Add("user-agent", Utils.userAgent);
+                    _webClient.DownloadFileAsync(uri, location + "\\" + fileName);
+                }
+                catch (Exception)
+                {
+                    Utils.Alert("Error while downloading", AlertForm.enmType.Error);
+                    return;
+                }
             }
         }
 
@@ -367,7 +375,14 @@ namespace AmongUsModManager.Forms
                     result = MessageBox.Show("Mod already installed. Reinstall it?", "Warning", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if (result == DialogResult.No)
+                {
+                    ResetInstallButton();
+                    btnInstallMod.Enabled = true;
+                    cbAvailableMods.Enabled = true;
+                    _mainform.EnableTabs();
+
                     return false;
+                }
             }
 
             if (String.IsNullOrEmpty(_currentModPath))

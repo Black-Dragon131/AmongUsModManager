@@ -16,6 +16,7 @@ namespace AmongUsModManager
         public static string amongUsPath;
         public static bool checkModUpdates = true;
         public static bool checkAummUpdates = true;
+        public static int updaterVersion;
         public static string configDir;
         public static List<InstalledMod> installedMods;
 
@@ -65,6 +66,7 @@ namespace AmongUsModManager
                     amongUsPath = data.AmongUsPath;
                     checkModUpdates = data.CheckModUpdates;
                     checkAummUpdates = data.CheckAummUpdates;
+                    updaterVersion = data.UpdaterVersion;
 
                     foreach (var item in data.InstalledMods.InstalledMod)
                     {
@@ -114,6 +116,7 @@ namespace AmongUsModManager
             config.AmongUsPath = amongUsPath;
             config.CheckModUpdates = checkModUpdates;
             config.CheckAummUpdates = checkAummUpdates;
+            config.UpdaterVersion = updaterVersion;
 
             InstalledMods mods = new InstalledMods();
             mods.InstalledMod = installedMods;

@@ -9,7 +9,7 @@ namespace AmongUsModManager
     static class Utils
     {
         public const int majorVersion = 1;
-        public const int minorVersion = 0;
+        public const int minorVersion = 1;
 
         public static readonly Color highlightColor = Color.FromArgb(79, 93, 117);
         public static readonly Color normalColor = Color.FromArgb(45, 49, 66);

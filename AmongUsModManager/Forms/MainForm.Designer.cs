@@ -40,6 +40,7 @@ namespace AmongUsModManager
             this.panelTabContainer = new System.Windows.Forms.Panel();
             this.lblTitle = new System.Windows.Forms.Label();
             this.btnClose = new FontAwesome.Sharp.IconButton();
+            this.btnUpdaterUpdate = new FontAwesome.Sharp.IconButton();
             this.panelMenu.SuspendLayout();
             this.panelLogo.SuspendLayout();
             this.SuspendLayout();
@@ -124,6 +125,7 @@ namespace AmongUsModManager
             // 
             // panelLogo
             // 
+            this.panelLogo.Controls.Add(this.btnUpdaterUpdate);
             this.panelLogo.Controls.Add(this.btnUpdate);
             this.panelLogo.Controls.Add(this.lblVersion);
             this.panelLogo.Dock = System.Windows.Forms.DockStyle.Top;
@@ -202,6 +204,29 @@ namespace AmongUsModManager
             this.btnClose.UseVisualStyleBackColor = false;
             this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
+            // btnUpdaterUpdate
+            // 
+            this.btnUpdaterUpdate.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(239)))), ((int)(((byte)(131)))), ((int)(((byte)(84)))));
+            this.btnUpdaterUpdate.FlatAppearance.BorderSize = 0;
+            this.btnUpdaterUpdate.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUpdaterUpdate.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUpdaterUpdate.ForeColor = System.Drawing.Color.White;
+            this.btnUpdaterUpdate.IconChar = FontAwesome.Sharp.IconChar.ArrowAltCircleDown;
+            this.btnUpdaterUpdate.IconColor = System.Drawing.Color.White;
+            this.btnUpdaterUpdate.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnUpdaterUpdate.IconSize = 36;
+            this.btnUpdaterUpdate.ImageAlign = System.Drawing.ContentAlignment.BottomRight;
+            this.btnUpdaterUpdate.Location = new System.Drawing.Point(0, 0);
+            this.btnUpdaterUpdate.Name = "btnUpdaterUpdate";
+            this.btnUpdaterUpdate.Padding = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.btnUpdaterUpdate.Size = new System.Drawing.Size(160, 50);
+            this.btnUpdaterUpdate.TabIndex = 5;
+            this.btnUpdaterUpdate.Text = "UPDATE NOW";
+            this.btnUpdaterUpdate.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnUpdaterUpdate.UseVisualStyleBackColor = false;
+            this.btnUpdaterUpdate.Visible = false;
+            this.btnUpdaterUpdate.Click += new System.EventHandler(this.btn_UpdaterUpdate_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -238,6 +263,7 @@ namespace AmongUsModManager
         private FontAwesome.Sharp.IconButton btnClose;
         private System.Windows.Forms.Label lblVersion;
         private FontAwesome.Sharp.IconButton btnUpdate;
+        private FontAwesome.Sharp.IconButton btnUpdaterUpdate;
     }
 }
 
